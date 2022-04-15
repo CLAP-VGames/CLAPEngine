@@ -93,7 +93,7 @@ namespace K_Engine {
 		return true;
 	}
 
-void ScriptManager::registerClassesandFunctions(lua_State* L)
+	void ScriptManager::registerClassesandFunctions(lua_State* L)
 {
     //LUA
     getGlobalNamespace(luaState).beginClass<ScriptManager>("ScriptManager")
@@ -130,15 +130,51 @@ void ScriptManager::registerClassesandFunctions(lua_State* L)
 		}
 	}
 
-	void ScriptManager::createPlayerbyLecture()
-	{
-		auto table = getTable("player");
-		string name = getParameter<string>(table, "name");
+	void ScriptManager::loadScene(std::string sceneFile, EntityManager* entMan){
+		if (!reloadLuaScript(sceneFile))
+			//lo hace aaron luego bien 
+			throw std::string("the scene" + sceneFile + "is not valid\n.");
+
+		//std::vector<string> extraMembers = { "GameObjectType"};
+		//dataComponents.insert(dataComponents.end(), extraMembers.begin(), extraMembers.end());
+
+		std::vector<string> entities;
+		luabridge::LuaRef ent = getTable("entities"); /*getMetatable(table, "entities");*/
+		int numEntities = ent.length();
+		for (size_t i = 1; i <= numEntities; i++)
+			entities.push_back(ent[i].cast<string>());
+
+		luabridge::LuaRef scene = getTable("scene");
+		
+		for (size_t i = 0; i < numEntities; i++){
+			luabridge::LuaRef entity = getMetatable(scene, entities[i]);
+			for (size_t j = 0; j < dataComponents.size(); j++){
+				luabridge::LuaRef property = getMetatable(entity, dataComponents[j]);
+
+				if (!property.isNil()) {
+
+					int hola = 10;
+					/*CraeateEntity with components;
+					datos1
+					datos2
+					datos3
+					...
+					addComponent(dataComponents[j], ts ...);
+					addComponent(dataComponents[j], datos1, datos2, datos3, ....);
+					*/
+				}
+			}
+			//iterate over extraMembers which are not components
+
+		}
+		
+		
+		/*string name = getParameter<string>(table, "name");
 		float x = getParameter<float>(getMetatable(table, "position"), "x");
 		float y = getParameter<float>(getMetatable(table, "position"), "y");
 		cout << "Player: " << name <<
 			"\nIn Position: " << x << ", "
-			<< y << endl;
+			<< y << endl;*/
 	}
 
 	luabridge::LuaRef ScriptManager::getTable(const std::string& c_name)
@@ -163,6 +199,10 @@ void ScriptManager::registerClassesandFunctions(lua_State* L)
 			cout << "CanLt get lua metatable, make sure metatable is accessible or exist";
 			return NULL;
 		}
+	}
+
+	void ScriptManager::setDataComponents(std::vector<std::string> components){
+		dataComponents = components;
 	}
 
 	template<class T>
