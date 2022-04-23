@@ -155,9 +155,6 @@ namespace K_Engine {
 			//lo hace aaron luego bien 
 			throw std::string("the scene" + sceneFile + "is not valid\n.");
 
-		//std::vector<string> extraMembers = { "GameObjectType"};
-		//dataComponents.insert(dataComponents.end(), extraMembers.begin(), extraMembers.end());
-
 		std::vector<string> entities;
 		//So we can call awake once they all are initialized
 		std::vector<Component*> luaComponents;
@@ -183,8 +180,9 @@ namespace K_Engine {
 				std::string value_ = "";
 				if(value != NULL)value_ = value;
 
-				if (key_ == "Enabled" && value_ == "false") {
-					e->setActive(false);
+				if (key_ == "Enabled"){
+					if(value_ == "false")
+						e->setActive(false);
 				}
 				else{
 
@@ -213,7 +211,7 @@ namespace K_Engine {
 						//Storing the information so the component can initialize
 						information.addPair(key_, value_);
 						int length = comp.length();
-						printf("%s : %s\n", key_, value_);
+						//printf("%s : %s\n", key_, value_);
 						lua_pop(comp, 1);
 					}
 
@@ -223,6 +221,7 @@ namespace K_Engine {
 
 				lua_pop(entity, 1);
 			}
+			printf("\x1b[32m Entity %s loaded succesfully.\n \x1b[0m", entities[i].c_str());
 		}
 	}
 
@@ -286,10 +285,6 @@ namespace K_Engine {
 			cout << "CanLt get lua metatable, make sure metatable is accessible or exist";
 			return NULL;
 		}
-	}
-
-	void ScriptManager::setDataComponents(std::vector<std::string> components){
-		dataComponents = components;
 	}
 
 	template<class T>
