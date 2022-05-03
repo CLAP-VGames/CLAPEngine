@@ -162,7 +162,6 @@ namespace K_Engine {
 
 	void ScriptManager::loadLuaScene(std::string sceneFile, EntityManager* entMan){
 		if (!reloadLuaScript(sceneFile))
-			//lo hace aaron luego bien 
 			throw std::string("the scene" + sceneFile + "is not valid\n.");
 
 		std::vector<string> entities;
