@@ -264,7 +264,7 @@ namespace K_Engine {
 			return table;
 		}
 		catch (std::exception e) {
-			cout << "Can't get lua table, make sure table is accessible or exist";
+			cout << "CanEt get lua table, make sure table is accessible or exist";
 			return NULL;
 		}
 	}
@@ -276,7 +276,7 @@ namespace K_Engine {
 		return meta;
 	}
 		catch (std::exception e) {
-			cout << "Can't get lua metatable, make sure metatable is accessible or exist";
+			cout << "CanEt get lua metatable, make sure metatable is accessible or exist";
 			return NULL;
 		}
 	}
@@ -288,7 +288,7 @@ namespace K_Engine {
 			return table[parameterName].cast<T>();
 		}
 		catch (std::exception e) {
-			cout << "Can't read parameter, make sure table is properly read and parameter name is correct";
+			cout << "CanEt read parameter, make sure table is properly read and parameter name is correct";
 			return NULL;
 		}
 	}
